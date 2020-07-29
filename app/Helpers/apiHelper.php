@@ -1,13 +1,15 @@
 <?php
 
-function successResponse($data, $message)
+function successResponse($data = [], $message)
 {
     $response = [
         'status' => true,
         'message' => $message,
-        'data' => $data
     ];
 
+    if (!empty($data)) {
+        $response['data'] = $data;
+    }
     return response()->json($response, 200);
 }
 

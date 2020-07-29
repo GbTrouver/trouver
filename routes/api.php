@@ -24,4 +24,5 @@ Route::post('login', 'API\Users\UserAuthController@login')->name('users.login');
 Route::group(['prefix'=> 'users', 'middleware' => 'auth:api', 'namespace' => 'API\Users'], function() {
     Route::get('user-details', 'UserAuthController@userDetails')->name('users.user_details');
     Route::post('update-user-details', 'UserAuthController@updateUserDetails')->name('users.update_user_details');
+    Route::post('change-password', 'UserAuthController@changePassword')->name('users.change_password');
 });

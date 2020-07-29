@@ -12,68 +12,25 @@ use App\Http\Requests\API\Users\UserRequest;
 
 class UserAuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(UserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'nullable',
-            'confirm_password' => 'nullable|same:password',
-            'mobile_no' => 'required|digits:10',
-            'gender' => 'required|digits:1',
-            'address' => 'nullable|string',
-            'city' => 'nullable|string',
-            'state' => 'nullable|string',
-            'country' => 'nullable|string',
-            'postal_code' => 'nullable|digits:6'
-        ]);
-
-        if ($validator->fails()) {
-            $response = [
-                'status' => false,
-                'message' => 'Validation Error(s)',
-                'data' => $validator->errors(),
-            ];
-            $response = json_encode($response);
-            return $response;
-        }
-
+        $valid = $request->validated();
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['role_id'] = 1;
         try {
             $user = User::create($input);
-            $response = json_encode([
-                'status' => true,
-                'message' => 'Your Registration has been done successfully.'
-            ]);
-            return $response;
+            $data['token'] = $user->createToken('TrouverApp')->accessToken;
+            $data['name'] = $user->name;
+            return successResponse($data, 'Your Registration has been done successfully.');
         } catch (Illuminate\Database\QueryException $e) {
-            $response = json_encode([
-                'status' => false,
-                'message' => 'Please, try again. Something went wrong.',
-            ]);
-            return $response;
+            return errorResponse('Please, try again. Something went wrong.');
         }
     }
 
-    public function login(Request $request)
+    public function login(UserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            $response = [
-                'status' => false,
-                'message' => 'Validation Error(s)',
-                'data' => $validator->errors(),
-            ];
-            // $response = json_encode($response);
-            return response()->json($response);
-        }
-
+        $valid = $request->validated();
         if (Auth::attempt([
                 'email' => $request->email,
                 'password' => $request->password
@@ -82,19 +39,9 @@ class UserAuthController extends Controller
             $data['name'] = $user->name;
             $data['token'] = $user->createToken('TrouverApp')->accessToken;
 
-            // $response = [
-            //     'status' => true,
-            //     'message' => 'You are logged in successfully.',
-            //     'data' => $data
-            // ];
-            // return response()->json($response);
             return successResponse($data, 'You are logged in successfully.');
         } else {
-            $response = [
-                'status' => false,
-                'message' => 'Please, check your credentials.'
-            ];
-            return response()->json($response);
+            return errorResponse('Please, check your credentials.');
         }
     }
 
@@ -107,15 +54,42 @@ class UserAuthController extends Controller
 
     public function updateUserDetails(UserRequest $request)
     {
-        // $valid = $request->validated();
-        // $input = $request->all();
-        $validator = $request->validated();
-        dd($validator);
-        // if ($validator->fails()) {
-        //     $data = $valid->messages();
-        //     return errorResponse('Validation Error.' ,$data);
-        // } else {
-        //     dd($validator);
-        // }
+        $valid = $request->validated();
+        $userId = Auth::id();
+        try {
+            $user = User::findOrFail($userId);
+            $user->fill($valid);
+            $user->save();
+            $data = $user;
+            return successResponse($data, 'Your Profile has been updated successfully.');
+        } catch (Illuminate\Database\QueryException $e) {
+            return errorResponse('Something went wrong, Please, try again.', $e->getMessage());
+        }
+    }
+
+    public function changePassword(UserRequest $request)
+    {
+        $valid = $request->validated();
+        $new_password = Hash::make($valid['new_password']);
+        try {
+            $user = User::findOrFail(Auth::user()->id);
+            $user->fill(['password' => $new_password]);
+            $user->save();
+            $data['success'] = true;
+            $logout = $this->logout();
+            return successResponse($data, 'Your Password has been changed successfully. Please, Login again.');
+        } catch (Illuminate\Database\QueryException $e) {
+            return errorResponse('Something went wrong, Please, try again.', $e->getMessage());
+        }
+        // return successResponse($valid, 'Validation run successfully.');
+    }
+
+    // public function logout(UserRequest $request)
+    public function logout()
+    {
+        $user = Auth::user();
+        $user->token()->revoke();
+        $data['success'] = true;
+        return successResponse($data, 'You are logged out successfully.');
     }
 }
