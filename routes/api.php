@@ -18,4 +18,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('register', 'APi\Users\UserAuthController@register')->name('user.register');
+Route::post('register', 'API\Users\UserAuthController@register')->name('users.register');
+Route::post('login', 'API\Users\UserAuthController@login')->name('users.login');
+
+Route::group(['prefix'=> 'users', 'middleware' => 'auth:api', 'namespace' => 'API\Users'], function() {
+    Route::get('user-details', 'UserAuthController@userDetails')->name('users.user_details');
+    Route::post('update-user-details', 'UserAuthController@updateUserDetails')->name('users.update_user_details');
+});
