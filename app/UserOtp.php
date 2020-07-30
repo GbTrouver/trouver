@@ -15,7 +15,7 @@ class UserOtp extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'otp', 'status', 'expires_in'
+        'user_id', 'otp', 'type', 'status', 'expires_in'
     ];
 
     public function getUser()

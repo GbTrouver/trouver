@@ -25,4 +25,7 @@ Route::group(['prefix'=> 'users', 'middleware' => 'auth:api', 'namespace' => 'AP
     Route::get('user-details', 'UserAuthController@userDetails')->name('users.user_details');
     Route::post('update-user-details', 'UserAuthController@updateUserDetails')->name('users.update_user_details');
     Route::post('change-password', 'UserAuthController@changePassword')->name('users.change_password');
+    // Route::post('/forgot-password-request', 'UserAuthController@forgotPasswordRequest')->name('users.forgot_password_request');
+    // Route::post('/forgot-password', 'UserAuthController@forgotPassword')->name('users.forgot_password');
+    Route::post('logout', 'UserAuthController@logout')->name('users.logout');
 });

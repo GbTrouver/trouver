@@ -47,7 +47,8 @@ class UserRequest extends FormRequest
         switch ($this->route_name) {
             case 'users.register':
                 return [
-                    'name' => 'required|string',
+                    'first_name' => 'required|string',
+                    'last_name' => 'required|string',
                     'email' => 'required|email|unique:users',
                     'password' => 'nullable',
                     'confirm_password' => 'required_with:password|same:password',
@@ -57,7 +58,7 @@ class UserRequest extends FormRequest
                     'city' => 'nullable|string',
                     'state' => 'nullable|string',
                     'country' => 'nullable|string',
-                    'postal_code' => 'nullable|digits:6'
+                    'postal_code' => 'nullable|digits:6',
                 ];
                 break;
             case 'users.login':
@@ -68,12 +69,13 @@ class UserRequest extends FormRequest
                 break;
             case 'users.update_user_details':
                 return [
-                    'name' => 'nullable|string',
+                    'first_name' => 'nullable|string',
+                    'last_name' => 'nullable|string',
                     'gender' => 'nullable|digits:1',
                     'city' => 'nullable|string',
                     'state' => 'nullable|string',
                     'country' => 'nullable|string',
-                    'postal_code' => 'nullable|digits:6'
+                    'postal_code' => 'nullable|digits:6',
                 ];
                 break;
             case 'users.change_password':
@@ -91,7 +93,8 @@ class UserRequest extends FormRequest
         switch ($this->route_name) {
             case 'users.register':
                 return [
-                    'name.required' => trans('errors.name_required'),
+                    'first_name.required' => trans('errors.first_name_required'),
+                    'last_name.required' => trans('errors.last_name_required'),
                     'email.required' => trans('errors.email_required'),
                     'email.email' => trans('errors.email_format'),
                     'email.unique' => trans('errors.email_unique'),
@@ -109,7 +112,7 @@ class UserRequest extends FormRequest
                 return [
                     'email.required' => trans('errors.email_required'),
                     'email.email' => trans('errors.email_format'),
-                    'password.required' => trans('errors.password_required')
+                    'password.required' => trans('errors.password_required'),
                 ];
                 break;
             case 'users.update_user_details':

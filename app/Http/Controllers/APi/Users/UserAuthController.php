@@ -45,7 +45,7 @@ class UserAuthController extends Controller
         }
     }
 
-    public function userDetails(UserRequest $request)
+    public function userDetails(Request $request)
     {
         $user = Auth::user();
         $message = 'Your profile details are here.';
@@ -91,5 +91,55 @@ class UserAuthController extends Controller
         $user->token()->revoke();
         $data['success'] = true;
         return successResponse($data, 'You are logged out successfully.');
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        // dd($request->only('email', 'password', 'confirm-password'));
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|min:8|regex:/^.*(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X]).*$/',
+            'password_confirmation' => 'required|same:password'
+        ]);
+
+        $email = User::where('token', $request->token)->first();
+
+        if (!empty($email)) {
+            try {
+                $user = User::where('id', $email->id)->update(
+                        ['password' => bcrypt($request->password),'token' => NULL
+                    ]);
+                return redirect()->route('admin.login')->with('success', 'Your password has been changed succesfully.');
+            } catch (\Illuminate\Database\QueryException $e) {
+                return redirect()->back()->with('error', 'Your password cannot be changed');
+            }
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Requested data not found, please try again.');
+        }
+    }
+
+    public function forgotPasswordRequest(Request $request)
+    {
+        $email = $request->only('email');
+        $user = User::where('email',$email)->first('id');
+
+        if(!empty($user))
+        {
+            try {
+                $token = base64_encode(uniqid());
+                Mail::to($email)->send(new ForgotPasswordMail($email['email'], $token));
+
+                //update token
+                User::where('id', $user->id)->update(['token' => $token]);
+
+                return redirect()->back()->with('success', 'Link has been sent on your email');
+            } catch (\Exception $e) {
+                return redirect()->back()->withInput()->with('error', 'Please try again.');
+            }
+        }
+        else
+        {
+            return redirect()->back()->with('error', "Your email doesn't exist.");
+        }
     }
 }

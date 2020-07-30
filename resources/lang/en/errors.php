@@ -3,7 +3,8 @@
 return [
 
     // users auth errors
-    'name_required' => 'Please, enter name.',
+    'first_name_required' => 'Please, enter First Name.',
+    'last_name_required' => 'Please, enter Last Name.',
     'email_required' => 'Please, enter an Email Address.',
     'email_format' => 'Please, enter an valid Email Address.',
     'email_unique' => 'Please, enter another Email. This Email is already in use.',
