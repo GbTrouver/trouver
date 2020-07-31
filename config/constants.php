@@ -12,8 +12,8 @@ return [
     'other' => 3,
 
     // otp statuses
-    'inactive' => 0,
-    'active' => 1,
+    'inactive_otp' => 0,
+    'active_otp' => 1,
     // otp statuses
 
     // otp types

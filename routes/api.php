@@ -21,11 +21,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', 'API\Users\UserAuthController@register')->name('users.register');
 Route::post('login', 'API\Users\UserAuthController@login')->name('users.login');
 
-Route::group(['prefix'=> 'users', 'middleware' => 'auth:api', 'namespace' => 'API\Users'], function() {
-    Route::get('user-details', 'UserAuthController@userDetails')->name('users.user_details');
-    Route::post('update-user-details', 'UserAuthController@updateUserDetails')->name('users.update_user_details');
-    Route::post('change-password', 'UserAuthController@changePassword')->name('users.change_password');
-    // Route::post('/forgot-password-request', 'UserAuthController@forgotPasswordRequest')->name('users.forgot_password_request');
-    // Route::post('/forgot-password', 'UserAuthController@forgotPassword')->name('users.forgot_password');
-    Route::post('logout', 'UserAuthController@logout')->name('users.logout');
+Route::group(['prefix'=> 'users', 'namespace' => 'API\Users'], function() {
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('user-details', 'UserAuthController@userDetails')->name('users.user_details');
+        Route::post('update-user-details', 'UserAuthController@updateUserDetails')->name('users.update_user_details');
+        Route::post('change-password', 'UserAuthController@changePassword')->name('users.change_password');
+        Route::post('logout', 'UserAuthController@logout')->name('users.logout');
+    });
+    Route::post('/forgot-password-request', 'UserAuthController@forgotPasswordRequest')->name('users.forgot_password_request');
+    Route::post('/forgot-password', 'UserAuthController@forgotPassword')->name('users.forgot_password');
 });

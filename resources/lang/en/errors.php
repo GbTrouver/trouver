@@ -8,6 +8,8 @@ return [
     'email_required' => 'Please, enter an Email Address.',
     'email_format' => 'Please, enter an valid Email Address.',
     'email_unique' => 'Please, enter another Email. This Email is already in use.',
+    'otp_required' => 'Please, enter OTP.',
+    'otp_digits' => 'Please, enter an valid OTP.',
     'password_required' => 'Please, enter Password.',
     'confirm_password_required' => 'Please, enter Confirm Password.',
     'confirm_password_same' => 'Confirm Password must be same as Password.',

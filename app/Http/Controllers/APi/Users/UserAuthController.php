@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers\API\Users;
 
+Use DB;
+use Image;
+use File;
 use App\User;
-use Validator;
+use App\UserOtp;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Mail\API\Users\UsersOtpMail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\API\Users\UserRequest;
 
 class UserAuthController extends Controller
@@ -36,7 +43,8 @@ class UserAuthController extends Controller
                 'password' => $request->password
             ])) {
             $user = Auth::user();
-            $data['name'] = $user->name;
+            $data['first_name'] = $user->first_name;
+            $data['last_name'] = $user->last_name;
             $data['token'] = $user->createToken('TrouverApp')->accessToken;
 
             return successResponse($data, 'You are logged in successfully.');
@@ -93,16 +101,16 @@ class UserAuthController extends Controller
         return successResponse($data, 'You are logged out successfully.');
     }
 
-    public function forgotPassword(Request $request)
+    public function forgotPassword(UserRequest $request)
     {
         // dd($request->only('email', 'password', 'confirm-password'));
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required|min:8|regex:/^.*(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X]).*$/',
-            'password_confirmation' => 'required|same:password'
-        ]);
+        $valid = $request->validated();
 
-        $email = User::where('token', $request->token)->first();
+        $user = User::where('email', $valid['email'])->first();
+        $otp_data = $user->getOtp;
+        return successResponse($otp_data, 'Otp is present');
+        // $diff_in_seconds =
+
 
         if (!empty($email)) {
             try {
@@ -118,28 +126,38 @@ class UserAuthController extends Controller
         }
     }
 
-    public function forgotPasswordRequest(Request $request)
+    public function forgotPasswordRequest(UserRequest $request)
     {
+        $valid = $request->validated();
         $email = $request->only('email');
-        $user = User::where('email',$email)->first('id');
+        $user = User::where('email', $email)->first('id');
 
         if(!empty($user))
         {
             try {
-                $token = base64_encode(uniqid());
-                Mail::to($email)->send(new ForgotPasswordMail($email['email'], $token));
+                $otp = rand(100001, 999999);
+                // Mail::to($email)->send(new UsersOtpMail($email['email'], $token));
+                $subject = 'Forgot Password OTP mail.';
+                $data['type'] = 'Forgot Password OTP';
+                $data['otp'] = $otp;
+                Mail::to($email)->send(new UsersOtpMail($subject, $data));
 
-                //update token
-                User::where('id', $user->id)->update(['token' => $token]);
+                $create = [
+                    'user_id' => $user->id,
+                    'otp' => $otp,
+                    'type' => config('constants.forgot_password_otp'),
+                    'status' => config('constants.active_otp')
+                ];
+                UserOtp::create($create);
 
-                return redirect()->back()->with('success', 'Link has been sent on your email');
+                return successResponse($valid, 'OTP Sent on Registered Email.');
             } catch (\Exception $e) {
-                return redirect()->back()->withInput()->with('error', 'Please try again.');
+                return errorResponse('Somethign went wrong. Please, try again', $e->getMessage());
             }
         }
         else
         {
-            return redirect()->back()->with('error', "Your email doesn't exist.");
+            return errorResponse("Entered email doesn't exist. Please, enter a valid email");
         }
     }
 }

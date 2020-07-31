@@ -38,4 +38,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getOtp()
+    {
+        return $this->hasMany(UserOtp::class, 'user_id', 'id');
+    }
 }

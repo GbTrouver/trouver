@@ -72,6 +72,7 @@ class UserRequest extends FormRequest
                     'first_name' => 'nullable|string',
                     'last_name' => 'nullable|string',
                     'gender' => 'nullable|digits:1',
+                    'address' => 'nullable|string',
                     'city' => 'nullable|string',
                     'state' => 'nullable|string',
                     'country' => 'nullable|string',
@@ -83,6 +84,20 @@ class UserRequest extends FormRequest
                     'password' => 'required',
                     'new_password' => 'required',
                     'new_confirm_password' => 'required_with:new_password|same:new_password',
+                ];
+                break;
+            case 'users.forgot_password_request':
+                return [
+                    'email' => 'required|email',
+                ];
+                break;
+            case 'users.forgot_password':
+                return [
+                    'email' => 'required|email',
+                    // 'password' => 'required|min:8|regex:/^.*(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X]).*$/',
+                    'otp' => 'required|digits:6',
+                    'password' => 'required',
+                    'confirm_password' => 'required_with:password|same:password'
                 ];
                 break;
         }
@@ -127,6 +142,23 @@ class UserRequest extends FormRequest
                     'new_password.required' => trans('errors.new_password_required'),
                     'new_confirm_password.required_with' => trans('errors.new_confirm_password_required_with'),
                     'new_confirm_password.same' => trans('errors.new_confirm_password_same'),
+                ];
+                break;
+            case 'users.forgot_password_request':
+                return [
+                    'email.required' => trans('errors.email_required'),
+                    'email.email' => trans('errors.email_format'),
+                ];
+                break;
+            case 'users.forgot_password':
+                return [
+                    'email.required' => trans('errors.email_required'),
+                    'email.email' => trans('errors.email_format'),
+                    'opt.required' => trans('errors.otp_required'),
+                    'otp.digits' => trans('errors.otp_digits'),
+                    'password.required' => trans('errors.password_required'),
+                    'confirm_password.required_with' => trans('errors.confirm_password_required'),
+                    'confirm_password.same' => trans('errors.confirm_password_same'),
                 ];
                 break;
         }
