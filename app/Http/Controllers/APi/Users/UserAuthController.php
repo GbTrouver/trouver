@@ -103,26 +103,54 @@ class UserAuthController extends Controller
 
     public function forgotPassword(UserRequest $request)
     {
-        // dd($request->only('email', 'password', 'confirm-password'));
         $valid = $request->validated();
+        $new_password = Hash::make($valid['password']);
+        // return successResponse($new_password, 'Yeah');
 
         $user = User::where('email', $valid['email'])->first();
-        $otp_data = $user->getOtp;
-        return successResponse($otp_data, 'Otp is present');
-        // $diff_in_seconds =
+        $otp_data = $user->getOtp
+                            ->where('type', config('constants.forgot_password_otp'))
+                            ->where('status', config('constants.active_otp'))
+                            ->last();
+        if (!empty($otp_data)) {
+            $data['created_at'] = Carbon::parse($otp_data->created_at);
+            $data['current'] = Carbon::now();
+            $diff_in_seconds = $data['created_at']->diffInSeconds($data['current']);
 
-
-        if (!empty($email)) {
-            try {
-                $user = User::where('id', $email->id)->update(
-                        ['password' => bcrypt($request->password),'token' => NULL
-                    ]);
-                return redirect()->route('admin.login')->with('success', 'Your password has been changed succesfully.');
-            } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->back()->with('error', 'Your password cannot be changed');
+            if ($otp_data->otp == $valid['otp']) {
+                if ($diff_in_seconds < 3000000000) {
+                    if (!empty($user)) {
+                        // dd($user, $otp_data);
+                        try {
+                            // $user = User::where('id', $email->id)->update(
+                            //         ['password' => bcrypt($request->password),'token' => NULL
+                            //     ]);
+                            $user->fill([
+                                'password' => Hash::make($valid['password'])
+                            ]);
+                            $otp_data->fill([
+                                'stauts' => config('constants.inactive_otp')
+                            ]);
+                            $user->save();
+                            $otp_data->save();
+                            $response['status'] = true;
+                            return successResponse($response, 'Your password has been changed succesfully.');
+                        } catch (\Illuminate\Database\QueryException $e) {
+                            return errorResponse('Something went wrong. Please, try again.', $e->getMessage());
+                        }
+                    } else {
+                        return redirect()->back()->withInput()->with('error', 'Requested data not found, please try again.');
+                    }
+                } else {
+                    return errorResponse('Your OTP has been expired.');
+                }
+            } else {
+                return errorResponse('Please, enter an correct OTP.');
             }
+
+            return successResponse($res , 'Otp is present');
         } else {
-            return redirect()->back()->withInput()->with('error', 'Requested data not found, please try again.');
+            return errorResponse('OTP is not present. Please, generate Otp first');
         }
     }
 

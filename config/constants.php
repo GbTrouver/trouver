@@ -22,4 +22,8 @@ return [
     'forgot_password_otp' => 3,
     'others_otp' => 4,
     // otp types
+
+    // otp expires
+    'otp_expires_in' => 300,
+    // otp expires
 ];
