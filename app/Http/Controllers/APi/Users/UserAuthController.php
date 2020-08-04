@@ -35,6 +35,96 @@ class UserAuthController extends Controller
         }
     }
 
+    public function loginRequest(UserRequest $request)
+    {
+        // return response()->json($request);
+        $valid = $request->validated();
+        $email = $request->only('email');
+        $user = User::where('email', $email)->first('id');
+
+        if(!empty($user))
+        {
+            try {
+                $otp = rand(100001, 999999);
+                // Mail::to($email)->send(new UsersOtpMail($email['email'], $token));
+                $subject = trans('labels.otp_mail_subject', ['subject' => 'Login']);
+                $data['type'] = trans('labels.otp_mail_type', ['type' => 'Login']);
+                $data['otp'] = $otp;
+                Mail::to($email)->send(new UsersOtpMail($subject, $data));
+
+                $create = [
+                    'user_id' => $user->id,
+                    'otp' => $otp,
+                    'type' => config('constants.login_otp'),
+                    'status' => config('constants.active_otp')
+                ];
+                UserOtp::create($create);
+
+                return successResponse($valid, 'OTP Sent on Registered Email.');
+            } catch (\Exception $e) {
+                return errorResponse('Somethign went wrong. Please, try again', $e->getMessage());
+            }
+        }
+        else
+        {
+            return errorResponse("Entered email doesn't exist. Please, enter a valid email");
+        }
+    }
+
+    public function loginWithOtp(UserRequest $request)
+    {
+        $valid = $request->validated();
+        $new_password = Hash::make($valid['password']);
+        // return successResponse($new_password, 'Yeah');
+
+        $user = User::where('email', $valid['email'])->first();
+        $otp_data = $user->getOtp
+                            ->where('type', config('constants.login_otp'))
+                            ->where('status', config('constants.active_otp'))
+                            ->last();
+        if (!empty($otp_data)) {
+            $data['created_at'] = Carbon::parse($otp_data->created_at);
+            $data['current'] = Carbon::now();
+            $diff_in_seconds = $data['created_at']->diffInSeconds($data['current']);
+
+            if ($otp_data->otp == $valid['otp']) {
+                if ($diff_in_seconds < config('constants.otp_expires_in')) {
+                    if (!empty($user)) {
+                        // dd($user, $otp_data);
+                        try {
+                            // Need to complete this login function
+                            if (Auth::attempt([
+                                    'email' => $request->email,
+                                    'password' => $request->password
+                                ])) {
+                                $user = Auth::user();
+                                $data['first_name'] = $user->first_name;
+                                $data['last_name'] = $user->last_name;
+                                $data['token'] = $user->createToken('TrouverApp')->accessToken;
+
+                                return successResponse($data, 'You are logged in successfully.');
+                            } else {
+                                return errorResponse('Please, check your credentials.');
+                            }
+                        } catch (\Illuminate\Database\QueryException $e) {
+                            return errorResponse('Something went wrong. Please, try again.', $e->getMessage());
+                        }
+                    } else {
+                        return redirect()->back()->withInput()->with('error', 'Requested User not found, please try again.');
+                    }
+                } else {
+                    return errorResponse('Your OTP has been expired.');
+                }
+            } else {
+                return errorResponse('Please, enter an correct OTP.');
+            }
+
+            return successResponse($res , 'Otp is present');
+        } else {
+            return errorResponse('OTP is not present. Please, generate Otp first');
+        }
+    }
+
     public function login(UserRequest $request)
     {
         $valid = $request->validated();
@@ -118,7 +208,7 @@ class UserAuthController extends Controller
             $diff_in_seconds = $data['created_at']->diffInSeconds($data['current']);
 
             if ($otp_data->otp == $valid['otp']) {
-                if ($diff_in_seconds < 3000000000) {
+                if ($diff_in_seconds < config('constants.otp_expires_in')) {
                     if (!empty($user)) {
                         // dd($user, $otp_data);
                         try {
@@ -156,6 +246,7 @@ class UserAuthController extends Controller
 
     public function forgotPasswordRequest(UserRequest $request)
     {
+        // return response()->json($request);
         $valid = $request->validated();
         $email = $request->only('email');
         $user = User::where('email', $email)->first('id');
@@ -165,8 +256,8 @@ class UserAuthController extends Controller
             try {
                 $otp = rand(100001, 999999);
                 // Mail::to($email)->send(new UsersOtpMail($email['email'], $token));
-                $subject = 'Forgot Password OTP mail.';
-                $data['type'] = 'Forgot Password OTP';
+                $subject = trans('labels.otp_mail_subject', ['subject' => 'Forgot Password']);
+                $data['type'] = trans('labels.otp_mail_type', ['type' => 'Forgot Password']);
                 $data['otp'] = $otp;
                 Mail::to($email)->send(new UsersOtpMail($subject, $data));
 

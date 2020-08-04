@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('register', 'API\Users\UserAuthController@register')->name('users.register');
+Route::post('login-request', 'API\Users\UserAuthController@loginRequest')->name('users.login_request');
+Route::post('login-with-otp', 'API\Users\UserAuthController@loginWithOtp')->name('users.login_with_otp');
 Route::post('login', 'API\Users\UserAuthController@login')->name('users.login');
 
 Route::group(['prefix'=> 'users', 'namespace' => 'API\Users'], function() {

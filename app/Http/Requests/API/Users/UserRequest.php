@@ -100,6 +100,11 @@ class UserRequest extends FormRequest
                     'confirm_password' => 'required_with:password|same:password'
                 ];
                 break;
+            case 'users.login_request':
+                return [
+                    'email' => 'required|email'
+                ];
+                break;
         }
     }
 
@@ -159,6 +164,12 @@ class UserRequest extends FormRequest
                     'password.required' => trans('errors.password_required'),
                     'confirm_password.required_with' => trans('errors.confirm_password_required'),
                     'confirm_password.same' => trans('errors.confirm_password_same'),
+                ];
+                break;
+            case 'users.login_request':
+                return [
+                    'email.required' => trans('errors.email_required'),
+                    'email.email' => trans('errors.email_format'),
                 ];
                 break;
         }
