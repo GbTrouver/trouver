@@ -22,6 +22,8 @@ return [
     'postal_code_format' => 'Please, enter a valid Postal Code.',
     'postal_code.length' => 'Postal Code must be 6 digits.',
 
+    'image_format' => 'Please, select valid image',
+
     'new_password_required' => 'Please, enter New Password.',
     'new_confirm_password_required_with' => 'Please, enter New Confirm Password.',
     'new_confirm_password_same' => 'Please, enter New Confirm Password as New Password.',

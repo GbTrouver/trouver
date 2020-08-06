@@ -52,6 +52,7 @@ class UserRequest extends FormRequest
                     'email' => 'required|email|unique:users',
                     'password' => 'nullable',
                     'confirm_password' => 'required_with:password|same:password',
+                    'image_name' => 'nullable|string',
                     'mobile_no' => 'required|digits:10|unique:users',
                     'gender' => 'required|digits:1',
                     'address' => 'nullable|string',
@@ -72,6 +73,7 @@ class UserRequest extends FormRequest
                     'first_name' => 'nullable|string',
                     'last_name' => 'nullable|string',
                     'gender' => 'nullable|digits:1',
+                    'image_name' => 'nullable|string',
                     'address' => 'nullable|string',
                     'city' => 'nullable|string',
                     'state' => 'nullable|string',
@@ -105,6 +107,12 @@ class UserRequest extends FormRequest
                     'email' => 'required|email'
                 ];
                 break;
+            case 'users.login_with_otp':
+                return [
+                    'email' => 'required|email',
+                    'otp' => 'required|digits:6',
+                ];
+                break;
         }
     }
 
@@ -126,6 +134,7 @@ class UserRequest extends FormRequest
                     'gender.required' => trans('errors.gender_required'),
                     'gender.digits' => trans('errors.gender_format'),
                     'postal_code.digits' => trans('errors.postal_code_format'),
+                    // 'image_name.image' => trans('errors.image_format'),
                 ];
                 break;
             case 'users.login':
@@ -139,6 +148,7 @@ class UserRequest extends FormRequest
                 return [
                     'gender.digits' => trans('errors.gender_format'),
                     'postal_code.digits' => trans('errors.postal_code_format'),
+                    // 'image_name.image' => trans('errors.image_format'),
                 ];
                 break;
             case 'users.change_password':
@@ -170,6 +180,14 @@ class UserRequest extends FormRequest
                 return [
                     'email.required' => trans('errors.email_required'),
                     'email.email' => trans('errors.email_format'),
+                ];
+                break;
+            case 'users.login_with_otp':
+                return [
+                    'email.required' => trans('errors.email_required'),
+                    'email.email' => trans('errors.email_format'),
+                    'opt.required' => trans('errors.otp_required'),
+                    'otp.digits' => trans('errors.otp_digits'),
                 ];
                 break;
         }

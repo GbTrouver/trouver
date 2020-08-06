@@ -1,7 +1,7 @@
 <?php
 
 return [
-    //
+    //user status
     'inactive' => 0,
     'active' => 1,
     'on_hold' => 2,
@@ -26,4 +26,7 @@ return [
     // otp expires
     'otp_expires_in' => 300,
     // otp expires
+
+    // User Profile image path
+    'user_profile_path' => '/assets/users/', // need to append "userId.email" folder name after this path
 ];

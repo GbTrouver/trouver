@@ -74,14 +74,13 @@ class UserAuthController extends Controller
     public function loginWithOtp(UserRequest $request)
     {
         $valid = $request->validated();
-        $new_password = Hash::make($valid['password']);
-        // return successResponse($new_password, 'Yeah');
 
         $user = User::where('email', $valid['email'])->first();
         $otp_data = $user->getOtp
                             ->where('type', config('constants.login_otp'))
                             ->where('status', config('constants.active_otp'))
                             ->last();
+
         if (!empty($otp_data)) {
             $data['created_at'] = Carbon::parse($otp_data->created_at);
             $data['current'] = Carbon::now();
@@ -90,13 +89,8 @@ class UserAuthController extends Controller
             if ($otp_data->otp == $valid['otp']) {
                 if ($diff_in_seconds < config('constants.otp_expires_in')) {
                     if (!empty($user)) {
-                        // dd($user, $otp_data);
                         try {
-                            // Need to complete this login function
-                            if (Auth::attempt([
-                                    'email' => $request->email,
-                                    'password' => $request->password
-                                ])) {
+                            if (Auth::loginUsingId($user->id)) {
                                 $user = Auth::user();
                                 $data['first_name'] = $user->first_name;
                                 $data['last_name'] = $user->last_name;
@@ -119,7 +113,7 @@ class UserAuthController extends Controller
                 return errorResponse('Please, enter an correct OTP.');
             }
 
-            return successResponse($res , 'Otp is present');
+            return successResponse($res , 'OTP is present');
         } else {
             return errorResponse('OTP is not present. Please, generate Otp first');
         }
@@ -152,8 +146,15 @@ class UserAuthController extends Controller
 
     public function updateUserDetails(UserRequest $request)
     {
+        // dd($request->request);
         $valid = $request->validated();
+        // dd($valid);
+        // return successResponse($valid, 'success');
         $userId = Auth::id();
+        if (!empty($valid['image_name'])) {
+            $raw_image = base64_decode($valid['image_name']);
+            dd($raw_image);
+        }
         try {
             $user = User::findOrFail($userId);
             $user->fill($valid);
