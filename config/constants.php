@@ -28,5 +28,5 @@ return [
     // otp expires
 
     // User Profile image path
-    'user_profile_path' => '/assets/users/', // need to append "userId.email" folder name after this path
+    'user_profile_path' => '/assets/users/profile_images/', // need to append "userId.email" folder name after this path
 ];

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API\Users;
 
 Use DB;
-use Image;
 use File;
+use Image;
 use App\User;
 use App\UserOtp;
 use Carbon\Carbon;
@@ -25,6 +25,16 @@ class UserAuthController extends Controller
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['role_id'] = 1;
+        if (!empty($input['image'])) {
+            $raw_image = base64_decode($input['image']);
+            $path = public_path().config('constants.user_profile_path');
+            $input['image_name'] = Carbon::now()->timestamp.'_registration'.'.png';
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0777, true);
+            }
+            Image::make($raw_image)->save($path.$input['image_name']);
+            unset($input['image']);
+        }
         try {
             $user = User::create($input);
             $data['token'] = $user->createToken('TrouverApp')->accessToken;
@@ -147,13 +157,21 @@ class UserAuthController extends Controller
     public function updateUserDetails(UserRequest $request)
     {
         // dd($request->request);
+        // $encoded = base64_encode(file_get_contents(public_path('default.png')));
+        // dd($encoded);
         $valid = $request->validated();
         // dd($valid);
         // return successResponse($valid, 'success');
         $userId = Auth::id();
-        if (!empty($valid['image_name'])) {
-            $raw_image = base64_decode($valid['image_name']);
-            dd($raw_image);
+        if (!empty($valid['image'])) {
+            $raw_image = base64_decode($valid['image']);
+            $path = public_path().config('constants.user_profile_path');
+            $valid['image_name'] = Carbon::now()->timestamp.'_'.Auth::user()->id.'.png';
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0777, true);
+            }
+            Image::make($raw_image)->save($path.$valid['image_name']);
+            unset($valid['image']);
         }
         try {
             $user = User::findOrFail($userId);
