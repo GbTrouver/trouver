@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::view('home', 'welcome');
+Route::view('home-view', 'welcome');
 
 Auth::routes();
 
