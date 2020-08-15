@@ -101,7 +101,7 @@ class UserAuthController extends Controller
                     if (!empty($user)) {
                         try {
                             if (Auth::loginUsingId($user->id)) {
-                                $user = Auth::user();
+                                // $user = Auth::user();
                                 $data['first_name'] = $user->first_name;
                                 $data['last_name'] = $user->last_name;
                                 $data['token'] = $user->createToken('TrouverApp')->accessToken;
