@@ -2,13 +2,26 @@
 @section('content')
     <div class="app-main__inner">
         <div class="app-page-title">
+            @if (session('success'))
+               <div class="alert alert-success alert-dismissible">
+                   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                   <strong>{{ session('success') }}</strong>
+               </div>
+            @endif
+            @if (session('error'))
+               <div class="alert alert-danger alert-dismissible">
+                   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                   <strong>{{ session('error') }}</strong>
+               </div>
+            @endif
             <div class="page-title-wrapper">
                 <div class="page-title-heading">
                     <div class="page-title-icon">
-                        <i class="pe-7s-car icon-gradient bg-mean-fruit">
+                        {{-- <i class="pe-7s-car icon-gradient bg-mean-fruit"> --}}
+                        <i class="fa fa-dashboard icon-gradient bg-mean-fruit">
                         </i>
                     </div>
-                    <div>Analytics Dashboard
+                    <div>Dashboard
                         <div class="page-title-subheading">This is an example dashboard created using build-in elements and components.
                         </div>
                     </div>
