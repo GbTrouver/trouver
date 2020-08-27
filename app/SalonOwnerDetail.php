@@ -21,6 +21,6 @@ class SalonOwnerDetail extends Model
 
     public function getSalon()
     {
-        return $this->belongsTo(Salon::class)
+        return $this->belongsTo(Salon::class);
     }
 }

@@ -25,6 +25,8 @@
     -->
 <link href="{{ asset('assets/admin/css/main.css') }}" rel="stylesheet"></head>
 <link rel="stylesheet" href="{{ asset('assets/admin/css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/admin/css/main-designing.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}"> --}}
 @stack('page_css')
 <body>
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -39,8 +41,17 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="{{ asset('assets/admin/js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/admin/js/validations/jquery.validate.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/admin/js/validations/additional-methods.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/admin/js/main.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}" charset="utf-8"></script>
+    <script type="text/javascript">
+        var errors = <?php echo json_encode(Lang::get('errors')); ?>;
+    </script>
     @stack('page_js')
+
+    @yield('model')
 </body>
 
 </html>

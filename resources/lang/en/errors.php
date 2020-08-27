@@ -29,4 +29,34 @@ return [
     'new_confirm_password_same' => 'Please, enter New Confirm Password as New Password.',
     // users auth errors
 
+    // Common errors
+    'name_required' => 'Please, enter a Name.',
+    'address_required' => 'Please, enter an Address',
+    'address_maxlength' => 'Please, enter an valid Address.',
+    'city_required' => 'Please, enter City.',
+    'state_required' => 'Please, enter State.',
+    'country_required' => 'Please, enter Country.',
+    'postal_code_required' => 'Please, enter Postal Code.',
+    'postal_code_digits' => 'Postal Code must be 6 digits long.',
+    // Common errors
+
+    // Salon Errors
+    'lat_required' => 'Please, enter Latitude.',
+    'lat_format' => 'Please, enter valid Latitude.',
+    'lng_required' => 'Please, enter Longitude.',
+    'lng_format' => 'Please, enter valid Longitude.',
+    'salon_opens_at_required' => 'Please, enter Salon Opening Time.',
+    'salon_opens_at_format' => 'Please, enter valid Salon Opening Time.',
+    'salon_close_at_required' => 'Please, enter Salon Closing Time.',
+    'salon_close_at_format' => 'Please, enter valid Salon Closing At Time.',
+    'salon_close_at_after_time' => 'Salon Close Time must be greate than Salon Open Time.',
+    'salon_lunch_from_required' => 'Please, enter Salon Lunch Starting Time.',
+    'salon_lunch_from_format' => 'Please, enter valid Salon Lunch Starting Time.',
+    'salon_lunch_to_required' => 'Please, enter Salon Lunch Ending Time.',
+    'salon_lunch_to_format' => 'Please, enter valid Salon Lunch Ending Time.',
+    'salon_lunch_to_after_time' => 'Salon Lunch Ending Time must be greater than Salon Lunch Ending Time.',
+
+    'image_required' => 'Please, upload an image.',
+    'alt_mobile_required' => 'Please, enter Alternate Mobile Number.',
+    // Salon Errors
 ];

@@ -31,25 +31,25 @@
     </div>    <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                <li class="app-sidebar__heading">Dashboard</li>
+                <li class="app-sidebar__heading">@lang('sidebar_labels.dashboard')</li>
                 <li>
                     {{-- <a href="index-2.html" class="mm-active"> --}}
                     {{-- {{ dd(strpos(Route::currentRouteName(), 'admin.dashboard') == 0) ? 'mm-active' : '' }} --}}
-                    <a href="index-2.html" class="{{ Route::currentRouteName() == 'admin.dashboard' ? 'mm-active' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}" class="{{ Route::currentRouteName() == 'admin.dashboard' ? 'mm-active' : '' }}">
                         <i class="metismenu-icon pe-7s-rocket"></i>
-                        Dashboard
+                        @lang('sidebar_labels.dashboard')
                     </a>
                     <a href="{{ route('admin.blank_page') }}">
                         <i class="metismenu-icon pe-7s-diamond"></i>
-                        Blank Page
+                        @lang('sidebar_labels.blank_page')
                     </a>
                 </li>
-                <li class="app-sidebar__heading">Services</li>
+                <li class="app-sidebar__heading">@lang('sidebar_labels.services')</li>
                 <li>
                     {{-- {{ dd((Route::currentRouteName())) }} --}}
                     <a href="{{ route('admin.salons.index') }}" class="{{ (strpos(Route::currentRouteName(), 'admin.salons') === 0) ? 'mm-active' : '' }}">
                         <i class="metismenu-icon pe-7s-scissors"></i>
-                        Salons
+                        @lang('sidebar_labels.salons')
                     </a>
                 </li>
                 <li class="app-sidebar__heading">UI Components</li>

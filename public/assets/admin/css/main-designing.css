@@ -1,0 +1,2 @@
+label.error { color: red; font-weight: 700; }
+.required, .form-group .required { color: #e02222; font-size: 12px; padding-left: 2px; }

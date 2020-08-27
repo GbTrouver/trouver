@@ -6,6 +6,11 @@ return [
     'active' => 1,
     'on_hold' => 2,
 
+    // user roles
+    'admin_role' => 1,
+    'user_role' => 2,
+    'salon_role' => 3,
+
     // gender consts
     'man' => 1,
     'woman' => 2,
