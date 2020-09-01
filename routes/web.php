@@ -28,6 +28,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::view('/login', 'admin.auth.login')->name('admin.login');
     Route::group(['namespace' => 'Admin'], function () {
         Route::post('/login-post', 'AuthController@loginPost')->name('admin.login_post');
+        Route::post('forgot-password-request', 'AuthController@forgotPasswordRequest')->name('admin.forgot_password_request');
+        Route::get('show-forgot-password/{otp}', 'AuthController@showForgotPassword')->name('admin.show_forgot_password')->where('otp', '[0-9]+');
+        Route::post('forgot-password', 'AuthController@forgotPassword')->name('admin.forgot_password');
 
         Route::group(['middleware' => 'auth'], function () {
             Route::view('/', 'admin.dashboard')->name('admin.dashboard');

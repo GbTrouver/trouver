@@ -25,7 +25,7 @@ class Salon extends Model
 
     public function getOwners()
     {
-        return $this->hasMany(SalonOwnerDetail::class);
+        return $this->hasOne(SalonOwnerDetail::class, 'salons_id');
     }
 
     public function getOpenAtAttribute($value)

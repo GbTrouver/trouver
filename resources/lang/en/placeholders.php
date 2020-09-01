@@ -20,7 +20,7 @@ return [
 
     'first_name' => 'First Name',
     'last_name' => 'Last Name',
-    'owner_image' => 'Please Upload Owner Image',
+    'owner_image' => 'Upload Owner Image',
     'mobile' => 'Mobile No.',
     'alt_mobile' => 'Alternate Mobile No.',
     // Admin Panel Placeholders

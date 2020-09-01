@@ -34,4 +34,7 @@ return [
 
     // User Profile image path
     'user_profile_path' => '/assets/users/profile_images/', // need to append "userId.email" folder name after this path
+    'salon_owners_images_path' => '/assets/users/salon/owners/images/',
+    'salon_logo_path' => '/assets/users/salon/logos/',
+    'salon_banner_path' => '/assets/users/salon/banners/',
 ];

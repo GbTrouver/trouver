@@ -9,7 +9,7 @@
                         @lang('labels.salons')
                     </strong></h5>
                 </div>
-                <div class="col-md-2 float-right">
+                <div class="col-md-2 text-right">
                     <a class="btn btn-primary" href="{{ route('admin.salons.create') }}">@lang('labels.add_salon')</a>
                     {{-- <button class="btn btn-primary"></button> --}}
                 </div>
@@ -29,22 +29,26 @@
                        </div>
                     @endif
                     <input type="hidden" id="get-salons-url" value="{{route('admin.salons.index')}}">
-                    <h3 class="card-title">Salons Index Page</h3>
-                    <br><br>
-                    {{-- <button class="btn btn-warning">Go somewhere</button> --}}
-                    <table class="table table-hover display" id="salons-table" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Opens At</th>
-                                <th>Close At</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    {{-- <h3 class="card-title">Salons Index Page</h3> --}}
+                    <div class="table-scrollable">
+                        <div class="pull-right text-right">
+                            <button type="button" name="view_all" id="view_all" onclick="viewall();" class="btn btn-primary">View All</button>
+                        </div>
+                        <table class="table table-hover display" id="salons-table" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Logo</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Opens At</th>
+                                    <th>Close At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             {{-- <div class="card-footer">Footer</div> --}}
@@ -54,11 +58,11 @@
 @endsection
 @push('page_js')
     <script src="{{ asset('assets/admin/js/datatables/datatables.min.js') }}" charset="utf-8"></script>
-    <script src="{{ asset('assets/admin/salons/salons.js') }}" charset="utf-8"></script>
+    <script src="{{ asset('assets/admin/salons/salons_listing.js') }}" charset="utf-8"></script>
 @endpush
 
 @section('model')
-    <div class="modal fade" id="owner_details" tabindex="-1" role="dialog" aria-labelledby="owner_details_label" aria-hidden="true" style="display: none;">
+    {{-- <div class="modal fade" id="owner_details" tabindex="-1" role="dialog" aria-labelledby="owner_details_label" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -77,5 +81,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection

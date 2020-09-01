@@ -26,6 +26,7 @@
 <link href="{{ asset('assets/admin/css/main.css') }}" rel="stylesheet"></head>
 <link rel="stylesheet" href="{{ asset('assets/admin/css/font-awesome.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/admin/css/main-designing.css') }}">
+<link rel="shortcut icon" href="{{ asset('favicon.png') }}" />
 {{-- <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}"> --}}
 @stack('page_css')
 <body>

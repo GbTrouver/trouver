@@ -11,14 +11,14 @@
                 </div>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a href="#salon_details" data-toggle="tab" class="nav-link active">Salon Details</a>
+                        <a href="#salon_details" data-toggle="tab" class="nav-link {{ $active_tab == '' || $active_tab=='salon_details' ? 'active': '' }}">Salon Details</a>
                     </li>
                     @if (!empty($salon))
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="#salon_pictures" data-toggle="tab" class="nav-link">Salon Pictures</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
-                            <a href="#owner_details" data-toggle="tab" class="nav-link">Owner Details</a>
+                            <a href="#owner_details" data-toggle="tab" class="nav-link {{ $active_tab=='owner_details' ? 'active': '' }}">Owner Details</a>
                         </li>
                     @endif
                 </ul>
@@ -26,7 +26,7 @@
             <div class="card-body">
                 <div class="tab-content">
                     {{-- salons Details Tab --}}
-                    <div class="tab-pane active" id="salon_details" role="tabpanel">
+                    <div class="tab-pane {{ $active_tab == '' || $active_tab=='salon_details' ? 'active': '' }}" id="salon_details" role="tabpanel">
                         <div class="col-md-12">
                             @if (session('success_salon_details'))
                                <div class="alert alert-success alert-dismissible">
@@ -41,11 +41,13 @@
                                </div>
                             @endif
                             @if (!empty($salon))
-                                <form class="" id="salons_form" method="post" action="{{ route('admin.salons.update', $salon->id) }}">
+                                <form class="" id="salons_form" method="post" action="{{ route('admin.salons.update', $salon->id) }}" enctype="multipart/form-data">
                             @else
-                                <form class="" id="salons_form" method="post" action="{{ route('admin.salons.store') }}">
+                                <form class="" id="salons_form" method="post" action="{{ route('admin.salons.store') }}" enctype="multipart/form-data">
                             @endif
                                 {{ csrf_field() }}
+                                <input type="hidden" name="active_tab" value="salon_details">
+                                <input type="hidden" name="next_tab" value="owner_details">
                                 <div class="form-row">
                                     <div class="col-md-6">
                                         <div class="position-relative form-group">
@@ -158,6 +160,32 @@
                                             <small class="text-danger"><strong>{{ $errors->first('lunch_to') }}</strong></small>
                                         </span>
                                     </div>
+                                </div> <br>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="position-relative form-group">
+                                            <label for="logo" class="control-label">Salon Logo</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" name="logo" id="logo" accept="image/*">
+                                                <label class="custom-file-label" for="logo">{{ !empty($salon->logo) ? $salon->logo : 'Upload Salon Logo' }}</label>
+                                            </div>
+                                            <span id="logo_err" style="color: red; font-weight:700;">
+                                                <small class="text-danger"><strong>{{ $errors->first('logo') }}</strong></small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="position-relative form-group">
+                                            <label for="banner" class="control-label">Salon Banner</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" name="banner" id="banner" accept="image/*">
+                                                <label class="custom-file-label" for="banner">{{ !empty($salon->banner) ? $salon->banner : 'Upload Salon Banner' }}</label>
+                                            </div>
+                                            <span id="banner_err" style="color: red; font-weight:700;">
+                                                <small class="text-danger"><strong>{{ $errors->first('banner') }}</strong></small>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="position-relative form-group">
                                     <button class="mt-2 btn btn-primary" type="submit">@lang('labels.submit')</button>
@@ -170,13 +198,13 @@
 
                     @if (!empty($salon))
                         {{-- Salons Pictures Tab --}}
-                        <div class="tab-pane" id="salon_pictures" role="tabpanel">
+                        {{-- <div class="tab-pane" id="salon_pictures" role="tabpanel">
                             <h3>Coming Soon...</h3>
-                        </div>
+                        </div> --}}
                         {{-- Salons Pictures Tab --}}
 
                         {{-- Onwer Details Tab --}}
-                        <div class="tab-pane" id="owner_details" role="tabpanel">
+                        <div class="tab-pane {{ $active_tab=='owner_details' ? 'active': '' }}" id="owner_details" role="tabpanel">
                             {{-- <h3>Coming Soon...</h3> --}}
                             @include('admin.salons.create.owner_details')
                         </div>
@@ -190,5 +218,7 @@
 @endsection
 
 @push('page_js')
-    {{-- <script src="{{ asset('assets/admin/salons/salons_validate.js') }}" charset="utf-8"></script> --}}
+    <script src="{{ asset('assets/admin/salons/salons_validate.js') }}" charset="utf-8"></script>
+    <script src="{{ asset('assets/admin/salons/salons.js') }}" charset="utf-8"></script>
+    <script src="{{ asset('assets/admin/salons/salons_tabs.js') }}" charset="utf-8"></script>
 @endpush

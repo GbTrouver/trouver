@@ -24,6 +24,7 @@
     * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
     -->
 <link href="{{ asset('assets/admin/css/main.css') }}" rel="stylesheet"></head>
+<link rel="stylesheet" href="{{ asset('assets/admin/css/main-designing.css') }}">
 {{-- @stack('page_css') --}}
 <body>
     <div class="app-container app-theme-white body-tabs-shadow">
@@ -80,17 +81,20 @@
                                 <div class="form-row">
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <button type="submit" name="submit" class="btn btn-lg btn-success">Login</button>
+                                            <button type="submit" name="submit" class="btn btn-lg btn-success"><strong>Login</strong></button>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <button type="reset" name="cancel" class="btn btn-lg btn-danger"> Cancel</button>
+                                            <button type="reset" name="cancel" class="btn btn-lg btn-danger"> <strong>Cancel</strong></button>
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-right">
                                         <div class="form-group">
-                                            <a href="#">Forgot Password?</a>
+                                            {{-- <a href="#">Forgot Password?</a> --}}
+                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">
+                                            <strong>Forgot Password</strong>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -100,12 +104,70 @@
                     </div>
                 </div>
 
-                <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+                {{-- <script src="http://maps.google.com/maps/api/js?sensor=true"></script> --}}
             </div>
         </div>
     </div>
 
     <script type="text/javascript" src="{{ asset('assets/admin/js/main.js') }}"></script>
     {{-- @stack('page_js') --}}
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Forgot Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form id="forgot_password_form" action="{{ route('admin.forgot_password_request') }}" method="post">
+                    <div class="modal-body">
+                            @csrf
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" name="otp_email" id="otp_email" placeholder="Enter Your Email" class="form-control">
+                                        <span id="email_err" style="color: red; font-weight:700;">
+                                            <small class="text-danger"><strong>{{ $errors->first('email') }}</strong></small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><strong>Close</strong></button>
+                        <button type="submit" class="btn btn-primary"><strong>Send OTP</strong></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ asset('assets/admin/js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/admin/js/validations/jquery.validate.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/admin/js/validations/additional-methods.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}" charset="utf-8"></script>
+    <script type="text/javascript">
+        $("#forgot_password_form").validate({
+            rules: {
+                otp_email: {
+                    required: true,
+                    pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                }
+            },
+            messages: {
+                otp_email: {
+                    required: 'Please, enter an Email Address.',
+                    pattern: 'Please enter an valid email address.',
+                }
+            },
+            submitHandler: function(form) {
+                console.log('valid Form');
+                form.submit();
+            }
+        });
+    </script>
 </body>
 </html>

@@ -25,6 +25,11 @@ class AdminAuthRequest extends FormRequest
                     'email' => Str::lower($this->email)
                 ]);
                 break;
+            case 'admin.forgot_password_request':
+                return [
+                    'email' => Str::lower($this->email)
+                ];
+                break;
         }
     }
 
@@ -52,6 +57,11 @@ class AdminAuthRequest extends FormRequest
                     'password' => 'required|min:8',
                 ];
                 break;
+            case 'admin.forgot_password_request':
+                return [
+                    'otp_email' => 'required|email',
+                ];
+                break;
         }
     }
 
@@ -64,6 +74,12 @@ class AdminAuthRequest extends FormRequest
                     'email.email' => trans('errors.email_format'),
                     'password.required' => trans('errors.password_required'),
                     // 'passwrod.min' => trans('errors.password_min'),
+                ];
+                break;
+            case 'admin.forgot_password_request':
+                return [
+                    'otp_email.required' => trans('errors.email_required'),
+                    'otp_email.email' => trans('errors.email_format'),
                 ];
                 break;
         }

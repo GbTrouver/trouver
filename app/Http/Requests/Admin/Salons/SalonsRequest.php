@@ -85,7 +85,9 @@ class SalonsRequest extends FormRequest
                     // 'close_at' => 'required|date_format:H:i|after:opens_at',
                     'close_at' => 'required|date_format:H:i',
                     'lunch_from' => 'required|date_format:H:i',
-                    'lunch_to' => 'required|date_format:H:i'
+                    'lunch_to' => 'required|date_format:H:i',
+                    'logo' => 'nullable|image',
+                    'banner' => 'nullable|image',
                 ];
                 break;
             case 'admin.salons.update':
@@ -103,7 +105,9 @@ class SalonsRequest extends FormRequest
                     // 'close_at' => 'required|date_format:H:i|after:opens_at',
                     'close_at' => 'required|date_format:H:i',
                     'lunch_from' => 'required|date_format:H:i',
-                    'lunch_to' => 'required|date_format:H:i'
+                    'lunch_to' => 'required|date_format:H:i',
+                    'logo' => 'nullable|image',
+                    'banner' => 'nullable|image',
                 ];
                 break;
             case 'admin.salons.update_owner_details':
@@ -111,7 +115,7 @@ class SalonsRequest extends FormRequest
                     'first_name' => 'required|string',
                     'last_name' => 'required|string',
                     'owner_email' => 'required|email',
-                    // 'owner_imgae' => 'required|mimes:jpeg.jpg,png',
+                    'owner_image' => 'nullable|image',
                     'mobile' => 'required|digits:10',
                     'alt_mobile' => 'required|digits:10'
                 ];
@@ -148,7 +152,9 @@ class SalonsRequest extends FormRequest
                     'lunch_from.date_format' => trans('errors.salon_lunch_from_format'),
                     'lunch_to.required' => trans('errors.salon_lunch_to_required'),
                     'lunch_to.date_format' => trans('errors.salon_lunch_to_format'),
-                    'lunch_to.after' => trans('errors.salon_lunch_to_after_time')
+                    'lunch_to.after' => trans('errors.salon_lunch_to_after_time'),
+                    'logo.image' => trans('errors.image_format'),
+                    'banner.image' => trans('errors.image_format'),
                 ];
                 break;
             case 'admin.salons.update':
@@ -177,7 +183,9 @@ class SalonsRequest extends FormRequest
                     'lunch_from.date_format' => trans('errors.salon_lunch_from_format'),
                     'lunch_to.required' => trans('errors.salon_lunch_to_required'),
                     'lunch_to.date_format' => trans('errors.salon_lunch_to_format'),
-                    'lunch_to.after' => trans('errors.salon_lunch_to_after_time')
+                    'lunch_to.after' => trans('errors.salon_lunch_to_after_time'),
+                    'logo.image' => trans('errors.image_format'),
+                    'banner.image' => trans('errors.image_format'),
                 ];
                 break;
             case 'admin.salons.update_owner_details':
@@ -186,8 +194,8 @@ class SalonsRequest extends FormRequest
                     'last_name.required' => trans('errors.last_name_required'),
                     'owner_email.required' => trans('errors.email_required'),
                     'owner_email.email' => trans('errors.email_format'),
-                    // 'owner_image.required' => trans('errors.image_required'),
-                    // 'owner_image.mimes' => trans('errors.image_format'),
+                    'owner_image.required' => trans('errors.image_required'),
+                    'owner_image.image' => trans('errors.image_format'),
                     'mobile.required' => trans('errors.mobile_no_required'),
                     'mobile.digits' => trans('errors.mobile_no_format'),
                     'alt_mobile.required' => trans('errors.mobile_no_required'),

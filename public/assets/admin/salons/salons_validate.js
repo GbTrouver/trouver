@@ -43,7 +43,15 @@ $(document).ready(function() {
             lunch_to: {
                 required: true,
                 time: true
-            }
+            },
+            logo: {
+                required: false,
+                accept: 'image/*',
+            },
+            banner: {
+                required: false,
+                accept: 'image/*',
+            },
         },
         messages: {
             name: errors.name_required,
@@ -88,6 +96,12 @@ $(document).ready(function() {
             lunch_to: {
                 required: errors.salon_lunch_to_required,
                 time: errors.salon_lunch_to_format
+            },
+            logo: {
+                accept: errors.image_format,
+            },
+            banner: {
+                accept: errors.image_format,
             }
         },
         submitHandler: function(form) {
@@ -104,19 +118,19 @@ $(document).ready(function() {
                 pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             },
             owner_image: {
-                required: true,
+                required: false,
                 // extension: 'jpg|jpeg|png',
                 accept: 'image/*',
             },
             mobile: {
                 required: true,
                 number: true,
-                maxlength: 10
+                minlength: 10
             },
             alt_mobile: {
                 required: true,
                 number: true,
-                maxlength: 10
+                minlength: 10
             }
         },
         messages: {
@@ -133,12 +147,12 @@ $(document).ready(function() {
             mobile: {
                 required: errors.mobile_no_required,
                 number: errors.mobile_no_format,
-                maxlength: errors.mobile_no_length,
+                minlength: errors.mobile_no_length,
             },
             alt_mobile: {
                 required: errors.alt_mobile_required,
                 number: errors.mobile_no_format,
-                maxlength: errors.mobile_no_length,
+                minlength: errors.mobile_no_length,
             }
         },
         submitHandler: function(form) {
